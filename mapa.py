@@ -13,6 +13,8 @@ class Coord:
         Argumentos:
             fila, columna (int): Coordenadas de la celda
         """
+        self.fila = fila
+        self.columna = columna
         raise NotImplementedError()
 
     def trasladar(self, df, dc):
