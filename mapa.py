@@ -15,6 +15,7 @@ class Coord:
         """
         self.fila = fila
         self.columna = columna
+        #hola
         raise NotImplementedError()
 
     def trasladar(self, df, dc):
