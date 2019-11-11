@@ -15,8 +15,6 @@ class Coord:
         """
         self.fila = fila
         self.columna = columna
-        #hola
-        raise NotImplementedError()
 
     def trasladar(self, df, dc):
         """Trasladar una celda.
@@ -31,7 +29,7 @@ class Coord:
         Devuelve:
             Coord: Las coordenadas de la celda trasladada
         """
-        raise NotImplementedError()
+        return Coord(self.fila + df, self.columna + dc)
 
     def distancia(self, otra):
         """Distancia entre dos celdas.
@@ -42,11 +40,10 @@ class Coord:
         Devuelve:
             int|float: La distancia entre las dos celdas (no negativo)
         """
-        raise NotImplementedError()
-
+        return ((self.fila - otra.fila) ** 2 + (self.columna - otra.columna) ** 2) ** 0.5
     def __eq__(self, otra):
         """Determina si dos coordenadas son iguales"""
-        raise NotImplementedError()
+        return self.fila == otra.fila and self.columna == otra.columna
 
     def __iter__(self):
         """Iterar las componentes de la coordenada.
@@ -58,6 +55,7 @@ class Coord:
         >>> assert c == 5
         """
         raise NotImplementedError()
+
 
     def __hash__(self):
         """Código "hash" de la instancia inmutable."""
@@ -210,3 +208,10 @@ class Mapa:
             >>>     print(coord, mapa.celda_bloqueada(coord))
         """
         raise NotImplementedError()
+
+
+class _IteradorCorrd:
+    def __init__(self, coord):
+        self.actual = coord.fila
+    def __next__(self):
+        if self.actual == coord.fila:
