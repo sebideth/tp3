@@ -54,8 +54,7 @@ class Coord:
         >>> assert f == 3
         >>> assert c == 5
         """
-        raise NotImplementedError()
-
+        self.__next__
 
     def __hash__(self):
         """Código "hash" de la instancia inmutable."""
@@ -67,7 +66,7 @@ class Coord:
 
     def __repr__(self):
         """Representación de la coordenada como cadena de texto"""
-        raise NotImplementedError()
+        return f'Coord({self.fila}, {self.columna})'
 
 class Mapa:
     """
