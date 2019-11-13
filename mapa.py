@@ -54,7 +54,6 @@ class Coord:
         >>> assert f == 3
         >>> assert c == 5
         """
-        self.__next__
 
     def __hash__(self):
         """Código "hash" de la instancia inmutable."""
