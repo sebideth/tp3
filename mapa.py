@@ -41,6 +41,7 @@ class Coord:
             int|float: La distancia entre las dos celdas (no negativo)
         """
         return ((self.fila - otra.fila) ** 2 + (self.columna - otra.columna) ** 2) ** 0.5
+
     def __eq__(self, otra):
         """Determina si dos coordenadas son iguales"""
         return self.fila == otra.fila and self.columna == otra.columna
@@ -54,6 +55,7 @@ class Coord:
         >>> assert f == 3
         >>> assert c == 5
         """
+        return _IteradorCoord(self)
 
     def __hash__(self):
         """Código "hash" de la instancia inmutable."""
@@ -66,6 +68,19 @@ class Coord:
     def __repr__(self):
         """Representación de la coordenada como cadena de texto"""
         return f'Coord({self.fila}, {self.columna})'
+
+class _IteradorCoord:
+    def __init__(self, coord):
+        self.actual = coord
+        self.contador = 0
+    def __next__(self):
+        if self.contador == 0:
+            self.contador += 1
+            return self.actual.fila
+        elif self.contador == 1:
+            self.contador += 1
+            return self.actual.columna
+        raise StopIteration()
 
 class Mapa:
     """
@@ -206,10 +221,3 @@ class Mapa:
             >>>     print(coord, mapa.celda_bloqueada(coord))
         """
         raise NotImplementedError()
-
-
-class _IteradorCorrd:
-    def __init__(self, coord):
-        self.actual = coord.fila
-    def __next__(self):
-        if self.actual == coord.fila:
