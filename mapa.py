@@ -95,7 +95,7 @@ class Mapa:
         Devuelve:
             (int, int): Cantidad de filas y columnas
         """
-        raise NotImplementedError()
+        return self.filas,self.columnas
 
     def origen(self):
         """Celda origen.
@@ -103,7 +103,7 @@ class Mapa:
         Devuelve:
             Coord: Las coordenadas de la celda origen
         """
-        raise NotImplementedError()
+        return self.origen
 
     def destino(self):
         """Celda destino.
@@ -111,7 +111,7 @@ class Mapa:
         Devuelve:
             Coord: Las coordenadas de la celda destino
         """
-        raise NotImplementedError()
+        return self.destino
 
     def asignar_origen(self, coord):
         """Asignar la celda origen.
@@ -119,7 +119,7 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda origen
         """
-        raise NotImplementedError()
+        self.origen = Coord()
 
     def asignar_destino(self, coord):
         """Asignar la celda destino.
@@ -127,7 +127,7 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda destino
         """
-        raise NotImplementedError()
+        self.destino = Coord(fila,columna)#iria el extremo opuesto
 
     def celda_bloqueada(self, coord):
         """¿La celda está bloqueada?
