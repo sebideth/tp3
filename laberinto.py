@@ -10,6 +10,6 @@ def generar_laberinto(filas, columnas):
         Mapa: un mapa nuevo con celdas bloqueadas formando un laberinto
               aleatorio
     """
-    mapa = Mapa(filas, Columnas)
+    mapa = Mapa(filas,columnas)
     #for i in range
     return mapa
