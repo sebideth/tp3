@@ -91,8 +91,8 @@ class Mapa:
         """
         self.filas = filas
         self.columnas = columnas
-        self.origen = Coord()
-        self.destino = Coord(filas, columnas)
+        self.coord_origen = Coord()
+        self.coord_destino = Coord(filas - 1, columnas - 1)
         self.paredes = []
 
     def dimension(self):
@@ -109,7 +109,8 @@ class Mapa:
         Devuelve:
             Coord: Las coordenadas de la celda origen
         """
-        return self.origen
+        return self.coord_origen
+
 
     def destino(self):
         """Celda destino.
@@ -117,7 +118,7 @@ class Mapa:
         Devuelve:
             Coord: Las coordenadas de la celda destino
         """
-        return self.destino
+        return self.coord_destino
 
     def asignar_origen(self, coord):
         """Asignar la celda origen.
@@ -125,7 +126,7 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda origen
         """
-        self.origen = coord
+        self.coord_origen = coord
 
     def asignar_destino(self, coord):
         """Asignar la celda destino.
@@ -133,7 +134,7 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda destino
         """
-        self.destino = coord
+        self.coord_destino = coord
 
     def celda_bloqueada(self, coord):
         """¿La celda está bloqueada?
@@ -190,7 +191,7 @@ class Mapa:
         Devuelve:
             bool: True si las coordenadas corresponden a una celda dentro del mapa
         """
-        return coord.fila < self.filas and coord.columna < self.columnas
+        return coord.fila < self.filas and coord.columna < self.columnas and coord.fila >= 0 and coord.columna >= 0
 
     def trasladar_coord(self, coord, df, dc):
         """Trasladar una coordenada, si es posible.
@@ -204,7 +205,7 @@ class Mapa:
                    contrario, devuelve la coordenada recibida.
         """
         nueva_coord = coord.trasladar(df, dc)
-        if es_coord_valida(nueva_coord):
+        if self.es_coord_valida(nueva_coord):
             return nueva_coord
         return coord
 

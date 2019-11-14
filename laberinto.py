@@ -1,3 +1,5 @@
+from mapa import Coord, Mapa
+
 def generar_laberinto(filas, columnas):
     """Generar un laberinto.
 
@@ -8,4 +10,6 @@ def generar_laberinto(filas, columnas):
         Mapa: un mapa nuevo con celdas bloqueadas formando un laberinto
               aleatorio
     """
-    raise NotImplementedError()
+    mapa = Mapa(filas, Columnas)
+    #for i in range
+    return mapa
