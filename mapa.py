@@ -15,7 +15,6 @@ class Coord:
         """
         self.fila = fila
         self.columna = columna
-        self.bloqueada = False #Desbloqueada = False, Bloqueada = True
 
     def trasladar(self, df, dc):
         """Trasladar una celda.
@@ -92,8 +91,9 @@ class Mapa:
         """
         self.filas = filas
         self.columnas = columnas
-        self.origen = asignar_origen(self)
-        self.destino = asignar_destino(self)
+        self.origen = Coord()
+        self.destino = Coord(filas, columnas)
+        self.paredes = []
 
     def dimension(self):
         """Dimensiones del mapa (filas y columnas).
@@ -125,7 +125,7 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda origen
         """
-        self.origen = Coord()
+        self.origen = coord
 
     def asignar_destino(self, coord):
         """Asignar la celda destino.
@@ -133,7 +133,8 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda destino
         """
-        self.destino = Coord(self.dimension)
+        self.destino = coord
+
     def celda_bloqueada(self, coord):
         """¿La celda está bloqueada?
 
@@ -143,7 +144,7 @@ class Mapa:
         Devuelve:
             bool: True si la celda está bloqueada
         """
-        return coord.bloqueada
+        return coord in self.paredes
 
     def bloquear(self, coord):
         """Bloquear una celda.
@@ -153,8 +154,8 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda a bloquear
         """
-        if not coord.bloqueada:
-            coord.bloqueada = True
+        if coord not in self.paredes:
+            self.paredes.append(coord)
 
     def desbloquear(self, coord):
         """Desbloquear una celda.
@@ -164,8 +165,8 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda a desbloquear
         """
-        if coord.bloqueada:
-            coord.bloqueada = False
+        if coord in self.paredes:
+            self.paredes.remove(coord)
 
     def alternar_bloque(self, coord):
         """Alternar entre celda bloqueada y desbloqueada.
@@ -175,7 +176,10 @@ class Mapa:
         Argumentos:
             coord (Coord): Coordenadas de la celda a alternar
         """
-        coord.bloqueada = not coord.bloqueada
+        if coord in self.paredes:
+            self.paredes.remove(coord)
+        else:
+            self.paredes.append(coord)
 
     def es_coord_valida(self, coord):
         """¿Las coordenadas están dentro del mapa?
@@ -215,4 +219,21 @@ class Mapa:
             >>> for coord in mapa:
             >>>     print(coord, mapa.celda_bloqueada(coord))
         """
-        raise NotImplementedError()
+        return _Iteradormapa(self.filas, self.columnas)
+
+class _Iteradormapa:
+    def __init__(self, filas, columnas):
+        self.i = 0
+        self.j = 0
+        self.filas = filas
+        self.columnas = columnas
+    def __next__(self):
+        if self.i == self.filas:
+            raise StopIteration()
+        coord = Coord(self.i, self.j)
+        if self.j < self.columnas - 1:
+            self.j += 1
+        else:
+            self.j = 0
+            self.i += 1
+        return coord
