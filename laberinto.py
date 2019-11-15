@@ -11,9 +11,8 @@ def generar_laberinto(filas, columnas):
               aleatorio
     """
     mapa = Mapa(filas, columnas)
-    for i in range(0,filas):
-        for j in range(0,columnas):
-            mapa.bloquear(Coord(i,j))
+    for coord in mapa:
+        mapa.bloquear(coord)
     mapa.asignar_origen(Coord(1,1))
     mapa.asignar_destino(Coord(filas - 2, columnas - 2))
 
