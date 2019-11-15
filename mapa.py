@@ -93,7 +93,7 @@ class Mapa:
         self.columnas = columnas
         self.coord_origen = Coord()
         self.coord_destino = Coord(filas - 1, columnas - 1)
-        self.paredes = []
+        self.paredes = set()
 
     def dimension(self):
         """Dimensiones del mapa (filas y columnas).
@@ -156,7 +156,7 @@ class Mapa:
             coord (Coord): Coordenadas de la celda a bloquear
         """
         if coord not in self.paredes:
-            self.paredes.append(coord)
+            self.paredes.add(coord)
 
     def desbloquear(self, coord):
         """Desbloquear una celda.
@@ -180,7 +180,7 @@ class Mapa:
         if coord in self.paredes:
             self.paredes.remove(coord)
         else:
-            self.paredes.append(coord)
+            self.paredes.add(coord)
 
     def es_coord_valida(self, coord):
         """¿Las coordenadas están dentro del mapa?
@@ -191,7 +191,7 @@ class Mapa:
         Devuelve:
             bool: True si las coordenadas corresponden a una celda dentro del mapa
         """
-        return coord.fila < self.filas and coord.columna < self.columnas and coord.fila >= 0 and coord.columna >= 0
+        return coord.fila < self.filas - 1 and coord.columna < self.columnas - 1 and coord.fila >= 0 and coord.columna >= 0
 
     def trasladar_coord(self, coord, df, dc):
         """Trasladar una coordenada, si es posible.
