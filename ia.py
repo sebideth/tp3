@@ -22,7 +22,9 @@ class IA:
         Argumentos:
             mapa (Mapa): El mapa con el laberinto a resolver
         """
-        raise NotImplementedError()
+        self.mapa = mapa
+        self.actual = mapa.coord_origen
+        self.visitadas = []
 
     def coord_jugador(self):
         """Coordenadas del "jugador".
@@ -43,7 +45,7 @@ class IA:
             >>> ia.coord_jugador()
             Coord(2, 0)
         """
-        raise NotImplementedError()
+        return self.actual
 
     def visitados(self):
         """Celdas visitadas.
@@ -61,7 +63,7 @@ class IA:
             >>> ia.visitados()
             [Coord(0, 0), Coord(1, 0),  Coord(2, 0)]
         """
-        raise NotImplementedError()
+        return self.visitadas
 
     def camino(self):
         """Camino principal calculado.
@@ -93,5 +95,8 @@ class IA:
         Si el jugador no está en la celda destino, y hay algún movimiento
         posible hacia una celda no visitada, se efectúa ese movimiento.
         """
+        #aca habria que appendear la posicion actual antes de moverse a la lista de visitados
+        #y tambien a la de camino pero despues hay que ver bien como las tratamos.
+        #el tema de avanzar bien no se como hacerlo pero mandemos mail.
         raise NotImplementedError()
 
