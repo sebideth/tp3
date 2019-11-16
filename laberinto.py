@@ -14,24 +14,26 @@ def generar_laberinto(filas, columnas):
     for coord in mapa:
         mapa.bloquear(coord)
     mapa.asignar_origen(Coord(1,1))
+    #Para que la celda destino tenga coordenadas impares
+    if filas % 2 == 0:
+        filas -= 1
+    if columnas % 2 == 0:
+        columnas -= 1
     mapa.asignar_destino(Coord(filas - 2, columnas - 2))
-
     visitadas = set()
-
     backtrack(mapa.origen(), visitadas, mapa)
-
     return mapa
 
 def backtrack(celda, visitadas, mapa):
     visitadas.add(celda)
     mapa.paredes.remove(celda)
     celdas_vecinas = buscar_celdas_vecinas(celda, mapa, visitadas)
-    if  celdas_vecinas == [] or celda == mapa.destino():
-        return
-    vecina, intermedia = definir_celda_vecina_intermedia(celda, celdas_vecinas, mapa)
-    visitadas.add(intermedia)
-    mapa.paredes.remove(intermedia)
-    backtrack(vecina, visitadas, mapa)
+    while celdas_vecinas != []:
+        vecina, intermedia = definir_celda_vecina_intermedia(celda, celdas_vecinas, mapa)
+        visitadas.add(intermedia)
+        mapa.paredes.remove(intermedia)
+        backtrack(vecina, visitadas, mapa)
+        celdas_vecinas = buscar_celdas_vecinas(celda, mapa, visitadas)
 
 def buscar_celdas_vecinas(celda, mapa, visitadas):
     posibles_celdas_vecinas = [(2,0),(-2,0),(0,2),(0,-2)]
