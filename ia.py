@@ -24,7 +24,8 @@ class IA:
         """
         self.mapa = mapa
         self.actual = mapa.coord_origen
-        self.visitadas = []
+        self.visitadas = set()
+        self.camino = []
 
     def coord_jugador(self):
         """Coordenadas del "jugador".
