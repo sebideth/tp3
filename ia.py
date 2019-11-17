@@ -1,3 +1,5 @@
+from mapa import *
+from random import choice
 class IA:
     """
     Inteligencia artificial para resolver un laberinto.
@@ -25,7 +27,7 @@ class IA:
         self.mapa = mapa
         self.actual = mapa.coord_origen
         self.visitadas = set()
-        self.camino = []
+        self.recorrido = []
 
     def coord_jugador(self):
         """Coordenadas del "jugador".
@@ -88,7 +90,7 @@ class IA:
             lista devuelta (esto tal vez permite simplificar la
             implementación).
         """
-        raise NotImplementedError()
+        return self.recorrido
 
     def avanzar(self):
         """Avanza un paso en la simulación.
@@ -96,8 +98,14 @@ class IA:
         Si el jugador no está en la celda destino, y hay algún movimiento
         posible hacia una celda no visitada, se efectúa ese movimiento.
         """
-        #aca habria que appendear la posicion actual antes de moverse a la lista de visitados
-        #y tambien a la de camino pero despues hay que ver bien como las tratamos.
-        #el tema de avanzar bien no se como hacerlo pero mandemos mail.
-        raise NotImplementedError()
+        d = [(1,0),(-1,0),(0,1),(0,-1)]
+        actual = self.actual
+        self.recorrido.append(actual)
+        x,y = choice(d)
+        prox = actual.trasladar(x,y)
+        while prox in self.recorrido or prox in self.mapa.paredes:
+            x,y = choice(d)
+            prox = actual.trasladar(x,y)
+        self.actual=prox
+
 
