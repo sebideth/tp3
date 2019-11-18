@@ -107,7 +107,7 @@ class Editor(tk.Tk):
         tk.Spinbox(extras, textvariable=self.tam_celda_px, from_=5, to=100, width=5).grid(row=2, column=1, sticky="w")
 
         tk.Label(extras, text="Velocidad IA").grid(row=3, column=0, padx=(0, 5), sticky="e")
-        tk.Spinbox(extras, textvariable=self.velocidad_ia, from_=10, to=1000, width=5).grid(row=3, column=1, sticky="w")
+        tk.Spinbox(extras, textvariable=self.velocidad_ia, from_=1, to=1000, width=5).grid(row=3, column=1, sticky="w")
 
         self.filas.trace('w', self.cambiar_dimension)
         self.columnas.trace('w', self.cambiar_dimension)
@@ -248,14 +248,14 @@ class ModoIA(tk.Toplevel):
         self.vista.grid()
 
         self.ia = IA(editor.mapa)
-
+        self.velocidad_ia = editor.velocidad_ia.get()
         self.bind('<Escape>', lambda e: self.destroy())
 
         self.actualizar_vista()
         self.esperar_y_avanzar()
 
     def esperar_y_avanzar(self):
-        self.after(50, self.avanzar)
+        self.after(self.velocidad_ia, self.avanzar)
 
     def avanzar(self):
         self.ia.avanzar()

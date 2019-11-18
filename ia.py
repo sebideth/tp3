@@ -1,5 +1,4 @@
 from mapa import *
-from random import choice
 class IA:
     """
     Inteligencia artificial para resolver un laberinto.
@@ -106,7 +105,7 @@ class IA:
         if celdas_vecinas != []:
             if self.actual != self.mapa.origen(): #Para que la celda origen no quede pintada de azul
                 self.recorrido.append(self.actual)
-            vecina = choice(celdas_vecinas)
+            vecina = celdas_vecinas[0]
             self.recorrido.append(vecina)
             self.actual = vecina
         else:
@@ -114,7 +113,7 @@ class IA:
 
 
 def buscar_celdas_vecinas(celda, mapa, visitadas):
-    posibles_celdas_vecinas = [(1,0),(-1,0),(0,1),(0,-1)]
+    posibles_celdas_vecinas = [(1,0),(0,1),(-1,0),(0,-1)] #Abajo, Derecha, Arriba, Izquierda. Así llega más rápido al destino
     celdas_vecinas = []
     for df, dc in posibles_celdas_vecinas:
         vecina = mapa.trasladar_coord(celda, df, dc)
