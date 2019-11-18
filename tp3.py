@@ -1,10 +1,10 @@
 import tkinter as tk
-
+from tkinter import messagebox
 from mapa import Coord, Mapa
 from laberinto import generar_laberinto
 from ia import IA
 
-DISTANCIA_NIEBLA = 10
+DISTANCIA_NIEBLA = 2
 
 class Color:
     VACIO = 'white'
@@ -85,14 +85,17 @@ class Editor(tk.Tk):
         self.tam_celda_px = tk.IntVar()
         self.tam_celda_px.set(20)
 
+        self.velocidad_ia = tk.IntVar()
+        self.velocidad_ia.set(50)
+
         panel = tk.Frame(self)
         panel.grid(column=0, row=0, sticky="nwes", padx=5, pady=5)
 
         dimension = tk.Frame(panel)
         dimension.grid(row=0, sticky="nwes")
 
-        pixels = tk.Frame(panel)
-        pixels.grid(row=2, sticky="nwes")
+        extras = tk.Frame(panel)
+        extras.grid(row=2, sticky="nwes")
 
         tk.Label(dimension, text="Filas").grid(row=0, column=0, padx=(0, 5), sticky="e")
         tk.Spinbox(dimension, textvariable=self.filas, from_=5, to=1000, width=5).grid(row=0, column=1, sticky="w")
@@ -100,8 +103,11 @@ class Editor(tk.Tk):
         tk.Label(dimension, text="Columnas").grid(row=1, column=0, padx=(0, 5), sticky="e")
         tk.Spinbox(dimension, textvariable=self.columnas, from_=5, to=1000, width=5).grid(row=1, column=1, sticky="w")
 
-        tk.Label(pixels, text="Pixels por celda").grid(row=2, column=0, padx=(0, 5), sticky="e")
-        tk.Spinbox(pixels, textvariable=self.tam_celda_px, from_=5, to=100, width=5).grid(row=2, column=1, sticky="w")
+        tk.Label(extras, text="Pixels por celda").grid(row=2, column=0, padx=(0, 5), sticky="e")
+        tk.Spinbox(extras, textvariable=self.tam_celda_px, from_=5, to=100, width=5).grid(row=2, column=1, sticky="w")
+
+        tk.Label(extras, text="Velocidad IA").grid(row=3, column=0, padx=(0, 5), sticky="e")
+        tk.Spinbox(extras, textvariable=self.velocidad_ia, from_=10, to=1000, width=5).grid(row=3, column=1, sticky="w")
 
         self.filas.trace('w', self.cambiar_dimension)
         self.columnas.trace('w', self.cambiar_dimension)
@@ -111,8 +117,8 @@ class Editor(tk.Tk):
 
         panel.rowconfigure(2, weight=1)
 
-        tk.Button(panel, text="Jugar", command=self.jugar).grid(row=3, sticky="we")
-        tk.Button(panel, text="IA", command=self.ia).grid(row=4, sticky="we", pady=(5, 0))
+        tk.Button(panel, text="Jugar", command=self.jugar).grid(row=5, sticky="we")
+        tk.Button(panel, text="IA", command=self.ia).grid(row=6, sticky="we", pady=(5, 0))
 
         self.vista = self.crear_vista()
 
@@ -216,7 +222,7 @@ class ModoJuego(tk.Toplevel):
     def mover(self, df, dc):
         coord_nueva = self.mapa.trasladar_coord(self.coord_jugador, df, dc)
         if coord_nueva == self.mapa.destino():
-            print("WIN")
+            messagebox.showinfo('Felicitaciones', 'Ganaste! Presiona OK para volver al Editor')
             self.destroy()
             return
         if self.mapa.celda_bloqueada(coord_nueva):
@@ -254,6 +260,10 @@ class ModoIA(tk.Toplevel):
     def avanzar(self):
         self.ia.avanzar()
         self.actualizar_vista()
+        if self.ia.coord_jugador() == self.vista.mapa.destino():
+            messagebox.showinfo('Terminado', 'La IA encontró el camino! Presiona OK para volver al Editor')
+            self.destroy()
+            return
         self.esperar_y_avanzar()
 
     def actualizar_vista(self):
