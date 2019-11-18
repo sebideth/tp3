@@ -1,4 +1,5 @@
 from mapa import *
+
 class IA:
     """
     Inteligencia artificial para resolver un laberinto.
@@ -111,11 +112,12 @@ class IA:
         else:
             self.actual = self.recorrido.pop()
 
-
 def buscar_celdas_vecinas(celda, mapa, visitadas):
-    posibles_celdas_vecinas = [(1,0),(0,1),(-1,0),(0,-1)] #Abajo, Derecha, Arriba, Izquierda. Así llega más rápido al destino
+    '''Dada una celda, mapa y un conjunto de celdas visitadas,
+    devuelve una lista de todas las celdas vecinas válidas.'''
+    posible_direcciones = [(1,0),(0,1),(-1,0),(0,-1)] #Abajo, Derecha, Arriba, Izquierda.Así llega más rápido al destino
     celdas_vecinas = []
-    for df, dc in posibles_celdas_vecinas:
+    for df, dc in posible_direcciones:
         vecina = mapa.trasladar_coord(celda, df, dc)
         if  vecina != celda and vecina not in mapa.paredes and vecina not in visitadas:
             celdas_vecinas.append(vecina)

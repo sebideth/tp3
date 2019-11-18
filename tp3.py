@@ -4,8 +4,6 @@ from mapa import Coord, Mapa
 from laberinto import generar_laberinto
 from ia import IA
 
-DISTANCIA_NIEBLA = 2
-
 class Color:
     VACIO = 'white'
     BLOQUE = 'black'
@@ -27,10 +25,10 @@ class Color:
         return Color.VACIO
 
     @staticmethod
-    def con_niebla(mapa, coord, coord_jugador):
+    def con_niebla(mapa, coord, coord_jugador, distancia_niebla):
         if coord == coord_jugador:
             return Color.JUGADOR
-        if coord_jugador.distancia(coord) > DISTANCIA_NIEBLA:
+        if coord_jugador.distancia(coord) > distancia_niebla:
             return Color.NIEBLA
         return Color.basico(mapa, coord)
 
@@ -88,6 +86,9 @@ class Editor(tk.Tk):
         self.velocidad_ia = tk.IntVar()
         self.velocidad_ia.set(50)
 
+        self.distancia_niebla = tk.IntVar()
+        self.distancia_niebla.set(2)
+
         panel = tk.Frame(self)
         panel.grid(column=0, row=0, sticky="nwes", padx=5, pady=5)
 
@@ -108,6 +109,9 @@ class Editor(tk.Tk):
 
         tk.Label(extras, text="Velocidad IA").grid(row=3, column=0, padx=(0, 5), sticky="e")
         tk.Spinbox(extras, textvariable=self.velocidad_ia, from_=1, to=1000, width=5).grid(row=3, column=1, sticky="w")
+
+        tk.Label(extras, text="Distancia de la niebla").grid(row=4, column=0, padx=(0, 5), sticky="e")
+        tk.Spinbox(extras, textvariable=self.distancia_niebla, from_=1, to=100, width=5).grid(row=4, column=1, sticky="w")
 
         self.filas.trace('w', self.cambiar_dimension)
         self.columnas.trace('w', self.cambiar_dimension)
@@ -207,6 +211,7 @@ class ModoJuego(tk.Toplevel):
         self.vista = Vista(self, editor.mapa, editor.tam_celda_px.get())
         self.vista.grid()
 
+        self.distancia_niebla = editor.distancia_niebla.get()
         self.mapa = editor.mapa
         self.coord_jugador = self.mapa.origen()
 
@@ -234,7 +239,7 @@ class ModoJuego(tk.Toplevel):
         self.vista.actualizar(self.obtener_color_celda)
 
     def obtener_color_celda(self, mapa, coord):
-        return Color.con_niebla(mapa, coord, self.coord_jugador)
+        return Color.con_niebla(mapa, coord, self.coord_jugador, self.distancia_niebla)
 
 class ModoIA(tk.Toplevel):
     def __init__(self, editor):

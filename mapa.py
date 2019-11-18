@@ -223,12 +223,18 @@ class Mapa:
         return _Iteradormapa(self.filas, self.columnas)
 
 class _Iteradormapa:
+    '''Clase del iterador de mapa, recorre este por coordenads a 
+    usando los indices de cada valor posible de filas y columnas.
+    '''
     def __init__(self, filas, columnas):
         self.i = 0
         self.j = 0
         self.filas = filas
         self.columnas = columnas
     def __next__(self):
+        '''Metodo next del iterador, recorre los indices i,j hasta que estos
+        llegan al tope de filas y columnas, levantando StopIteration.
+        '''
         if self.i == self.filas:
             raise StopIteration()
         coord = Coord(self.i, self.j)
