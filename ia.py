@@ -113,7 +113,8 @@ class IA:
             self.actual = self.recorrido.pop()
 
 def buscar_celdas_vecinas(celda, mapa, visitadas):
-    '''Dada una celda, mapa y un conjunto de celdas visitadas, devuelve una lista de todas las celdas vecinas válidas.'''
+    '''Dada una celda, mapa y un conjunto de celdas visitadas,
+    devuelve una lista de todas las celdas vecinas válidas.'''
     posibles_celdas_vecinas = [(1,0),(0,1),(-1,0),(0,-1)] #Abajo, Derecha, Arriba, Izquierda. Así llega más rápido al destino
     celdas_vecinas = []
     for df, dc in posibles_celdas_vecinas:
