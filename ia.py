@@ -98,14 +98,23 @@ class IA:
         Si el jugador no está en la celda destino, y hay algún movimiento
         posible hacia una celda no visitada, se efectúa ese movimiento.
         """
-        d = [(1,0),(-1,0),(0,1),(0,-1)]
-        actual = self.actual
-        self.recorrido.append(actual)
-        x,y = choice(d)
-        prox = actual.trasladar(x,y)
-        while prox in self.recorrido or prox in self.mapa.paredes:
-            x,y = choice(d)
-            prox = actual.trasladar(x,y)
-        self.actual=prox
+        self.visitadas.add(self.actual)
+        if self.actual == self.mapa.destino():
+            return
+        celdas_vecinas = buscar_celdas_vecinas(self.actual, self.mapa, self.visitadas)
+        if celdas_vecinas != []:
+            vecina = choice(celdas_vecinas)
+            self.recorrido.append(vecina)
+            self.actual = vecina
+        else:
+            self.actual = self.recorrido.pop()
+            print(self.recorrido)
 
-
+def buscar_celdas_vecinas(celda, mapa, visitadas):
+    posibles_celdas_vecinas = [(1,0),(-1,0),(0,1),(0,-1)]
+    celdas_vecinas = []
+    for df, dc in posibles_celdas_vecinas:
+        vecina = mapa.trasladar_coord(celda, df, dc)
+        if  vecina != celda and vecina not in mapa.paredes and vecina not in visitadas:
+            celdas_vecinas.append(vecina)
+    return celdas_vecinas
