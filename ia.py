@@ -98,18 +98,20 @@ class IA:
         Si el jugador no está en la celda destino, y hay algún movimiento
         posible hacia una celda no visitada, se efectúa ese movimiento.
         """
-        if self.actual != self.mapa.coord_origen: #aca, es para que no agregue el origen a visitadas
+        if self.actual != self.mapa.origen(): #Para que la celda origen no quede pintada de celeste
             self.visitadas.add(self.actual)
         if self.actual == self.mapa.destino():
             return
         celdas_vecinas = buscar_celdas_vecinas(self.actual, self.mapa, self.visitadas)
         if celdas_vecinas != []:
+            if self.actual != self.mapa.origen(): #Para que la celda origen no quede pintada de azul
+                self.recorrido.append(self.actual)
             vecina = choice(celdas_vecinas)
             self.recorrido.append(vecina)
             self.actual = vecina
         else:
             self.actual = self.recorrido.pop()
-            
+
 
 def buscar_celdas_vecinas(celda, mapa, visitadas):
     posibles_celdas_vecinas = [(1,0),(-1,0),(0,1),(0,-1)]
