@@ -43,9 +43,9 @@ def buscar_celdas_vecinas(celda, mapa, visitadas):
     '''Crea la lista de las celdas vecinas posibles trasladando la coordenada actual en todas
     las direcciones posibles guardadas.
     '''
-    posibles_celdas_vecinas = [(2,0),(-2,0),(0,2),(0,-2)]
+    posibles_direcciones_vecinas = [(2,0),(-2,0),(0,2),(0,-2)]
     celdas_vecinas = []
-    for df, dc in posibles_celdas_vecinas:
+    for df, dc in posibles_direcciones_vecinas:
         vecina = mapa.trasladar_coord(celda, df, dc)
         if  vecina != celda and vecina not in visitadas:
             celdas_vecinas.append((df ,dc))
@@ -55,7 +55,7 @@ def definir_celda_vecina_intermedia(celda, celdas_vecinas, mapa):
     '''Elije de manera aleatoria entre las posibles direcciones de las celdas vecinas
     y devuelve una tupla con la vecina elegida y la intermedia entre ella y la actual.
     '''
-    dist = choice(celdas_vecinas)
-    vecina =  mapa.trasladar_coord(celda, dist[0], dist[1])
-    intermedia =  mapa.trasladar_coord(celda, dist[0] // 2, dist[1] // 2)
+    direccion = choice(celdas_vecinas)
+    vecina =  mapa.trasladar_coord(celda, direccion[0], direccion[1])
+    intermedia =  mapa.trasladar_coord(celda, direccion[0] // 2, direccion[1] // 2)
     return vecina, intermedia
