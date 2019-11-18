@@ -98,7 +98,7 @@ class IA:
         Si el jugador no está en la celda destino, y hay algún movimiento
         posible hacia una celda no visitada, se efectúa ese movimiento.
         """
-        if self.actual != self.mapa.coord_origen: #aca, es para que no agregue el origen a visitadas
+        if self.actual != self.mapa.origen(): #aca, es para que no agregue el origen a visitadas.
             self.visitadas.add(self.actual)
         if self.actual == self.mapa.destino():
             return
