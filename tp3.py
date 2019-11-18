@@ -4,7 +4,7 @@ from mapa import Coord, Mapa
 from laberinto import generar_laberinto
 from ia import IA
 
-DISTANCIA_NIEBLA = 2
+DISTANCIA_NIEBLA = 10
 
 class Color:
     VACIO = 'white'
@@ -45,11 +45,10 @@ class Color:
         return Color.basico(mapa, coord)
 
 class Vista(tk.Canvas):
-    TAM_CELDA_PX = 20
-
-    def __init__(self, contenedor, mapa):
+    def __init__(self, contenedor, mapa, tam=20):
+        self.tam_celda_px = tam
         filas, columnas = mapa.dimension()
-        super().__init__(contenedor, width=columnas * Vista.TAM_CELDA_PX, height=filas * Vista.TAM_CELDA_PX)
+        super().__init__(contenedor, width=columnas * self.tam_celda_px, height=filas * self.tam_celda_px)
         self.mapa = mapa
 
     def actualizar(self, obtener_color_celda):
@@ -57,12 +56,13 @@ class Vista(tk.Canvas):
         for coord in self.mapa:
             color = obtener_color_celda(self.mapa, coord)
             f, c = coord
-            x = c * Vista.TAM_CELDA_PX
-            y = f * Vista.TAM_CELDA_PX
-            self.create_rectangle((x, y, x + Vista.TAM_CELDA_PX, y + Vista.TAM_CELDA_PX), fill=color, outline="")
+            x = c * self.tam_celda_px
+            y = f * self.tam_celda_px
+            self.create_rectangle((x, y, x + self.tam_celda_px, y + self.tam_celda_px), fill=color, outline="")
 
     def coord_px_a_celda(self, x, y):
-        return Coord(int(y // Vista.TAM_CELDA_PX), int(x // Vista.TAM_CELDA_PX))
+        return Coord(int(y // self.tam_celda_px), int(x // self.tam_celda_px))
+
 
 class Editor(tk.Tk):
     def __init__(self):
@@ -82,11 +82,17 @@ class Editor(tk.Tk):
 
         self.modo_arrastre = False
 
+        self.tam_celda_px = tk.IntVar()
+        self.tam_celda_px.set(20)
+
         panel = tk.Frame(self)
         panel.grid(column=0, row=0, sticky="nwes", padx=5, pady=5)
 
         dimension = tk.Frame(panel)
         dimension.grid(row=0, sticky="nwes")
+
+        pixels = tk.Frame(panel)
+        pixels.grid(row=2, sticky="nwes")
 
         tk.Label(dimension, text="Filas").grid(row=0, column=0, padx=(0, 5), sticky="e")
         tk.Spinbox(dimension, textvariable=self.filas, from_=5, to=1000, width=5).grid(row=0, column=1, sticky="w")
@@ -94,8 +100,12 @@ class Editor(tk.Tk):
         tk.Label(dimension, text="Columnas").grid(row=1, column=0, padx=(0, 5), sticky="e")
         tk.Spinbox(dimension, textvariable=self.columnas, from_=5, to=1000, width=5).grid(row=1, column=1, sticky="w")
 
+        tk.Label(pixels, text="Pixels por celda").grid(row=2, column=0, padx=(0, 5), sticky="e")
+        tk.Spinbox(pixels, textvariable=self.tam_celda_px, from_=5, to=100, width=5).grid(row=2, column=1, sticky="w")
+
         self.filas.trace('w', self.cambiar_dimension)
         self.columnas.trace('w', self.cambiar_dimension)
+        self.tam_celda_px.trace('w', self.cambiar_dimension)
 
         tk.Button(panel, text="Generar", command=self.generar).grid(row=1, sticky="we", pady=5)
 
@@ -118,7 +128,8 @@ class Editor(tk.Tk):
             return self.mapa
 
     def crear_vista(self):
-        vista = Vista(self, self.mapa)
+
+        vista = Vista(self, self.mapa, self.tam_celda_px.get())
         vista.grid(column=1, row=0, sticky="nwes", padx=5, pady=5)
 
         vista.bind("<1>", lambda e: self.alternar_bloque(self.vista.coord_px_a_celda(e.x, e.y)))
@@ -187,7 +198,7 @@ class ModoJuego(tk.Toplevel):
 
         self.title("TP3 - Jugador")
 
-        self.vista = Vista(self, editor.mapa)
+        self.vista = Vista(self, editor.mapa, editor.tam_celda_px.get())
         self.vista.grid()
 
         self.mapa = editor.mapa
@@ -204,6 +215,10 @@ class ModoJuego(tk.Toplevel):
 
     def mover(self, df, dc):
         coord_nueva = self.mapa.trasladar_coord(self.coord_jugador, df, dc)
+        if coord_nueva == self.mapa.destino():
+            print("WIN")
+            self.destroy()
+            return
         if self.mapa.celda_bloqueada(coord_nueva):
             return
         self.coord_jugador = coord_nueva
@@ -223,7 +238,7 @@ class ModoIA(tk.Toplevel):
 
         self.title("TP3 - Backtracking")
 
-        self.vista = Vista(self, editor.mapa)
+        self.vista = Vista(self, editor.mapa, editor.tam_celda_px.get())
         self.vista.grid()
 
         self.ia = IA(editor.mapa)

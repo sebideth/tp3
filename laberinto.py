@@ -1,5 +1,6 @@
 from mapa import Coord, Mapa
 from random import choice
+from time import sleep
 def generar_laberinto(filas, columnas):
     """Generar un laberinto.
 
@@ -10,7 +11,6 @@ def generar_laberinto(filas, columnas):
         Mapa: un mapa nuevo con celdas bloqueadas formando un laberinto
               aleatorio
     """
-
     mapa = Mapa(filas, columnas)
     for coord in mapa:
         mapa.bloquear(coord)

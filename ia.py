@@ -118,6 +118,6 @@ def buscar_celdas_vecinas(celda, mapa, visitadas):
     celdas_vecinas = []
     for df, dc in posibles_celdas_vecinas:
         vecina = mapa.trasladar_coord(celda, df, dc)
-        if  vecina != celda and vecina != mapa.origen() and vecina not in mapa.paredes and vecina not in visitadas:
+        if  vecina != celda and vecina not in mapa.paredes and vecina not in visitadas:
             celdas_vecinas.append(vecina)
     return celdas_vecinas
