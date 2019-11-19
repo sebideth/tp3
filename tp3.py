@@ -1,8 +1,8 @@
 import tkinter as tk
-
 from mapa import Coord, Mapa
 from laberinto import generar_laberinto
 from ia import IA
+import sys
 
 DISTANCIA_NIEBLA = 2
 
@@ -252,6 +252,7 @@ class ModoIA(tk.Toplevel):
         self.vista.actualizar(obtener_color_celda)
 
 def main():
+    sys.setrecursionlimit(5000)
     Editor().mainloop()
 
 main()
