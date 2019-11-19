@@ -32,12 +32,15 @@ def backtrack(celda, visitadas, mapa):
     visitadas.add(celda)
     mapa.paredes.remove(celda)
     celdas_vecinas = buscar_celdas_vecinas(celda, mapa, visitadas)
-    while celdas_vecinas != []:
-        vecina, intermedia = definir_celda_vecina_intermedia(celda, celdas_vecinas, mapa)
-        visitadas.add(intermedia)
-        mapa.paredes.remove(intermedia)
-        backtrack(vecina, visitadas, mapa)
-        celdas_vecinas = buscar_celdas_vecinas(celda, mapa, visitadas)
+    for celda_v in celdas_vecinas: #este es el que mas rapido y mas tamaño soporta, sigue tirando error mas de 100*100
+    #while celdas_vecinas != []: este es el que estabamos usando
+    #for coord in mapa: este no me convence, tarda mucho en generarlo
+        if celdas_vecinas != [] and celda_v is not mapa.destino():
+            vecina, intermedia = definir_celda_vecina_intermedia(celda, celdas_vecinas, mapa)
+            visitadas.add(intermedia)
+            mapa.paredes.remove(intermedia)
+            backtrack(vecina, visitadas, mapa)
+            celdas_vecinas = buscar_celdas_vecinas(celda, mapa, visitadas)
 
 def buscar_celdas_vecinas(celda, mapa, visitadas):
     '''Crea la lista de las celdas vecinas posibles trasladando la coordenada actual en todas
@@ -47,7 +50,7 @@ def buscar_celdas_vecinas(celda, mapa, visitadas):
     celdas_vecinas = []
     for df, dc in posibles_direcciones_vecinas:
         vecina = mapa.trasladar_coord(celda, df, dc)
-        if  vecina != celda and vecina not in visitadas:
+        if  vecina != celda and vecina not in visitadas and vecina:
             celdas_vecinas.append((df ,dc))
     return celdas_vecinas
 
