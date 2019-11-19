@@ -62,3 +62,54 @@ def definir_celda_vecina_intermedia(celda, celdas_vecinas, mapa):
     vecina =  mapa.trasladar_coord(celda, direccion[0], direccion[1])
     intermedia =  mapa.trasladar_coord(celda, direccion[0] // 2, direccion[1] // 2)
     return vecina, intermedia
+    def create(self):
+        self.maze = [[1] * self.width for _ in range(self.height)] # full of walls
+        self.start_cell = None
+        self.steps = None
+        self.recursion_depth = None
+        self._visited_cells = []
+        self._visit_cell(self.exit_cell)
+#############ESTE ALGORTIMO HAY QUE MODIFICARLO Y USARLO, FUNCIONA BIEN CON S
+ def _visit_cell(self, cell, depth=0):
+    x, y = cell
+    self.maze[y][x] = 0 # remove wall
+    self._visited_cells.append(cell)
+    neighbors = self._get_neighbors(cell)
+    random.shuffle(neighbors)
+    for neighbor in neighbors:
+        if not neighbor in self._visited_cells:
+            self._remove_wall(cell, neighbor)
+            self._visit_cell(neighbor, depth+1)
+    self._update_start_cell(cell, depth)
+
+def _get_neighbors(self, cell):
+        """
+        Get the cells next to the cell
+        Example:
+          Given the following mazes
+          The a neighbor's are b
+          # # # # # # #     # # # # # # #
+          # # # b # # #     # a # b # # #
+          # # # # # # #     # # # # # # #
+          # b # a # b #     # b # # # # #
+          # # # # # # #     # # # # # # #
+          # # # b # # #     # # # # # # #
+          # # # # # # #     # # # # # # #
+        """
+    x, y = cell
+    neighbors = []
+
+        # Left
+    if x - 2 > 0:
+        neighbors.append((x-2, y))
+        # Right
+    if x + 2 < self.width:
+        neighbors.append((x+2, y))
+        # Up
+    if y - 2 > 0:
+        neighbors.append((x, y-2))
+        # Down
+    if y + 2 < self.height:
+        neighbors.append((x, y+2))
+
+    return neighbors

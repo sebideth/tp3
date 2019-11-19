@@ -252,7 +252,7 @@ class ModoIA(tk.Toplevel):
         self.vista.actualizar(obtener_color_celda)
 
 def main():
-    sys.setrecursionlimit(5000)
+    #sys.setrecursionlimit(5000)
     Editor().mainloop()
 
 main()
